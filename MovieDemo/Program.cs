@@ -1,3 +1,6 @@
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using MovieDemo.Data;
 namespace MovieDemo
 {
     public class Program
@@ -5,6 +8,8 @@ namespace MovieDemo
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+            builder.Services.AddDbContext<MovieDemoContext>(options =>
+                options.UseSqlServer(builder.Configuration.GetConnectionString("MovieDemoContext") ?? throw new InvalidOperationException("Connection string 'MovieDemoContext' not found.")));
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
