@@ -22,9 +22,9 @@ namespace MovieDemo.Controllers
         // GET: Movies
         public async Task<IActionResult> Index()
         {
-              return _context.Movie != null ? 
-                          View(await _context.Movie.ToListAsync()) :
-                          Problem("Entity set 'MovieDemoContext.Movie'  is null.");
+            var model = await _context.Movie.ToListAsync();
+            return View(model);
+                         
         }
 
         // GET: Movies/Details/5
@@ -56,7 +56,7 @@ namespace MovieDemo.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,ReleaseDate,Genre,Rating")] Movie movie)
+        public async Task<IActionResult> Create([Bind("Id,ReleaseDate,Genre,Rating")] Movie movie)
         {
             if (ModelState.IsValid)
             {
