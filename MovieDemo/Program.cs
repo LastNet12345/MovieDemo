@@ -8,10 +8,13 @@ namespace MovieDemo
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-            builder.Services.AddDbContext<MovieDemoContext>(options =>
-                options.UseSqlServer(builder.Configuration.GetConnectionString("MovieDemoContext") ?? throw new InvalidOperationException("Connection string 'MovieDemoContext' not found.")));
+
+
 
             // Add services to the container.
+            builder.Services.AddDbContext<MovieDemoContext>(options =>
+                options.UseSqlServer(builder.Configuration.GetConnectionString("MovieDemoContext") ?? throw new InvalidOperationException("Connection string 'MovieDemoContext' not found.")));
+           
             builder.Services.AddControllersWithViews();
 
 
@@ -42,7 +45,7 @@ namespace MovieDemo
 
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}");
+                pattern: "{controller=Movies}/{action=Index}/{id?}");
 
             app.Run();
         }
