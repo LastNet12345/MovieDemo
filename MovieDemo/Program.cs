@@ -1,6 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using MovieDemo.Data;
+using MovieDemo.Services;
+
 namespace MovieDemo
 {
     public class Program
@@ -17,6 +19,12 @@ namespace MovieDemo
            
             builder.Services.AddControllersWithViews();
 
+            //builder.Services.AddSingleton  samma instans för hela applikations livslängd
+            //builder.Services.AddScoped  samma instans för hela requestet
+            //builder.Services.AddTransient  samma instans varje gång någon vill ha servicen
+
+
+            builder.Services.AddScoped<IGenreSelectListService, GenreSelectListService>();
 
 
 

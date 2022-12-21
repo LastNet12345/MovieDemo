@@ -8,16 +8,19 @@ using Microsoft.EntityFrameworkCore;
 using MovieDemo.Data;
 using MovieDemo.Models.Entities;
 using MovieDemo.Models.ViewModels;
+using MovieDemo.Services;
 
 namespace MovieDemo.Controllers
 {
     public class MoviesController : Controller
     {
         private readonly MovieDemoContext _context;
+        private readonly IGenreSelectListService genreSelectListService;
 
-        public MoviesController(MovieDemoContext context)
+        public MoviesController(MovieDemoContext context, IGenreSelectListService genreSelectListService)
         {
             _context = context;
+            this.genreSelectListService = genreSelectListService;
         }
 
         public async Task<IActionResult> Filter(string title, int? genre)
@@ -48,10 +51,29 @@ namespace MovieDemo.Controllers
             var model = new IndexViewModel
             {
                 Movies = await movies.ToListAsync(),
-                Genres = await GetGenresAsync()
+                Genres = await genreSelectListService.GetGenresAsync() //GetGenresAsync()
             };
 
             return View(nameof(Index2), model);
+        } 
+        
+        public async Task<IActionResult> Filter3(IndexViewModel2 viewModel)
+        {
+         
+            var movies = string.IsNullOrWhiteSpace(viewModel.Title) ? 
+                                    _context.Movie : 
+                                    _context.Movie.Where(m => m.Title.StartsWith(viewModel.Title));
+
+            movies = viewModel.Genre is null ?
+                                movies :
+                                movies.Where(m => m.Genre == viewModel.Genre);
+
+            var model = new IndexViewModel2
+            {
+                Movies = await movies.ToListAsync()
+            };
+
+            return View(nameof(Index3), model);
         }
 
         private async Task<IEnumerable<SelectListItem>> GetGenresAsync()
@@ -82,6 +104,19 @@ namespace MovieDemo.Controllers
                                    Value = g.ToString()
                                })
                                .ToList()
+            };
+
+            return View(model);
+                         
+        }   
+        
+        public async Task<IActionResult> Index3()
+        {
+            var movies = await _context.Movie.ToListAsync();
+
+            var model = new IndexViewModel2
+            {
+                Movies = movies,
             };
 
             return View(model);
