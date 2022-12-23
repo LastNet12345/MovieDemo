@@ -11,7 +11,8 @@ namespace MovieDemo
         {
             var builder = WebApplication.CreateBuilder(args);
 
-
+            //sfsfsf
+            //sfsfsf
 
             // Add services to the container.
             builder.Services.AddDbContext<MovieDemoContext>(options =>
